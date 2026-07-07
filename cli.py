@@ -1,4 +1,7 @@
 import sys
+import requests
+
+BASE_URL = "http://127.0.0.1:5000"
 
 def display_menu():
     print("\n==========================================")
@@ -15,32 +18,35 @@ def display_menu():
 
 def view_all_inventory():
     print("\n[Action] Fetching all inventory items...")
-    # TODO: Implement GET /inventory request
-    pass
+    try:
+        response = requests.get(f"{BASE_URL}/inventory")
+        if response.status_code == 200:
+            items = response.json()
+            for item in items:
+                print(f"\nID: {item['id']} | {item['product_name']} | Price: {item['price']} | Stock: {item['stock']}")
+        else:
+            print("[Error] Could not fetch inventory.")
+    except requests.exceptions.ConnectionError:
+        print("[Error] Could not connect to the Flask server.")
 
 def view_single_item():
     print("\n[Action] Fetching a single item...")
-    # TODO: Implement GET /inventory/<id> request
     pass
 
 def add_new_item():
     print("\n[Action] Creating a new item...")
-    # TODO: Implement POST /inventory request
     pass
 
 def update_item():
     print("\n[Action] Updating an item's details...")
-    # TODO: Implement PATCH /inventory/<id> request
     pass
 
 def delete_item():
     print("\n[Action] Deleting an item from stock...")
-    # TODO: Implement DELETE /inventory/<id> request
     pass
 
 def search_by_barcode():
     print("\n[Action] Querying product barcode details...")
-    # TODO: Implement POST /inventory request with barcode lookup
     pass
 
 def main():
