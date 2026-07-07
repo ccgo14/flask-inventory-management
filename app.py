@@ -32,7 +32,7 @@ def fetch_from_openfoodfacts(barcode):
     """Queries the external OpenFoodFacts API to supplement product data"""
     url = f"https://world.openfoodfacts.org/api/v0/product/{barcode}.json"
     try:
-        response = requests.get(url, timeout=5)
+        response = requests.get(url, timeout=10)
         if response.status_code == 200:
             data = response.json()
             if data.get("status") == 1:
@@ -43,7 +43,13 @@ def fetch_from_openfoodfacts(barcode):
                     "ingredients_text": product_data.get("ingredients_text", "No ingredients provided.")
                 }
     except requests.exceptions.RequestException:
-        pass
+        # Fallback mechanism: Return mock data if API is unreachable or times out
+        return {
+            "product_name": "Fallback Product",
+            "brands": "Fallback Brand",
+            "ingredients_text": "Could not fetch from OpenFoodFacts API (Using Fallback)"
+        }
+
     return None
 
 # ==========================================
